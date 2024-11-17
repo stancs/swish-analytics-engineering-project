@@ -1,0 +1,11 @@
+http://localhost:8080/api/search?playerId=338365
+
+http://localhost:8080/api/search?eventId=1947132
+
+http://localhost:8080/api/search?playerId=338365&eventId=1947132
+
+http://localhost:8080/api/search?playerId=338365&eventId=1947346
+
+http://localhost:8080/api/search?eventId=1947132&sortBy=desc
+
+http://localhost:8080/api/search?eventId=1947132&sortBy=asc
