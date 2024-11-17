@@ -1,0 +1,18 @@
+node_modules
+.env
+.env.*
+.expo
+.npmrc
+.DS_Store
+
+# jest coverage
+coverage/**
+
+# Ignore built js/ts files
+dist/**/*
+
+# VS Code configs
+.vscode
+
+# IDEA metadata
+.idea/
