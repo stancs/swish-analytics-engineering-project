@@ -1,0 +1,72 @@
+{
+  "playerId": 338365,
+  "playerName": "Stephen Curry",
+  "matches": [
+    {
+      "id": 2292111,
+      "season": 2020,
+      "date": "2021-02-04",
+      "status": {
+        "official": null
+      },
+      "team": {
+        "abbreviation": "GS",
+        "id": 9
+      },
+      "opponent": {
+        "abbreviation": "Dal",
+        "id": 6
+      },
+      "player": {
+        "position": "PG",
+        "starter": true,
+        "home": false
+      },
+      "props": [
+        {
+          "name": "offense",
+          "type": {
+            "id": 10
+          },
+          "stats": [
+            {
+              "name": "points",
+              "type": {
+                "id": 100
+              },
+              "projection": {
+                "mean": 29.54,
+                "median": 29.5398
+              },
+              "lines": [
+                {
+                  "optimal": true,
+                  "balanced": true,
+                  "open": false,
+                  "type": "fraction",
+                  "line": 29.5,
+                  "status": {
+                    "marketSuspended": false,
+                    "modifiedAt": "2021-02-05 00:41:28",
+                    "modifiedAtMicro": "2021-02-05 00:41:28.240855"
+                  },
+                  "probs": {
+                    "standard": {
+                      "over": 0.5016,
+                      "under": 0.4984,
+                      "push": 0
+                    },
+                    "normalized": {
+                      "over": 0.5016,
+                      "under": 0.4984
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

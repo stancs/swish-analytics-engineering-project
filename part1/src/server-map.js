@@ -2,6 +2,8 @@ const restify = require('restify');
 const fs = require('fs');
 const path = require('path');
 
+const quickSort = require('./quickSort');
+
 // Load dataset
 const playerData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/data.json')));
 
@@ -27,61 +29,6 @@ function buildHashTables(data) {
   // console.log(eventMap);
 }
 
-// Call the hash table builder
-buildHashTables(playerData);
-
-// Sorting function: Selection Sort
-function selectionSort(arr, sortBy) {
-  const data = [...arr];
-  const n = data.length;
-
-  for (let i = 0; i < n - 1; i++) {
-    let minIdx = i;
-    for (let j = i + 1; j < n; j++) {
-      if (
-        (sortBy === 'asc' && data[j].player_id < data[minIdx].player_id) ||
-        (sortBy === 'desc' && data[j].player_id > data[minIdx].player_id)
-      ) {
-        minIdx = j;
-      }
-    }
-    if (minIdx !== i) {
-      [data[i], data[minIdx]] = [data[minIdx], data[i]];
-    }
-  }
-  return data;
-}
-
-// Quick Sort function
-function quickSort(arr, sortBy, low = 0, high = arr.length - 1) {
-  if (low < high) {
-    // Partition the array
-    const partitionIndex = partition(arr, sortBy, low, high);
-
-    // Recursively sort elements before and after the partition
-    quickSort(arr, sortBy, low, partitionIndex - 1);
-    quickSort(arr, sortBy, partitionIndex + 1, high);
-  }
-  return arr;
-}
-
-// Partition function
-function partition(arr, sortBy, low, high) {
-  const pivot = arr[high].player_id; // Choose the last element as the pivot
-  let i = low - 1;
-
-  for (let j = low; j < high; j++) {
-    if ((sortBy === 'asc' && arr[j].player_id <= pivot) || (sortBy === 'desc' && arr[j].player_id >= pivot)) {
-      i++;
-      [arr[i], arr[j]] = [arr[j], arr[i]]; // Swap elements
-    }
-  }
-
-  // Place the pivot element in the correct position
-  [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
-  return i + 1;
-}
-
 // Search function
 function searchHashTables(playerIdStr, eventIdStr) {
   const playerId = parseInt(playerIdStr);
@@ -99,6 +46,9 @@ function searchHashTables(playerIdStr, eventIdStr) {
   // console.log('results: ', results);
   return results;
 }
+
+// Call the hash table builder
+buildHashTables(playerData);
 
 // Create server
 const server = restify.createServer();

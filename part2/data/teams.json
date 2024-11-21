@@ -1,0 +1,121 @@
+{
+  "sport": 1,
+  "season": 2020,
+  "date": "2021-02-04",
+  "matchId": 2292111,
+  "homeSummaryId": "1-6-2292111-7-01-99",
+  "teams": {
+    "home": {
+      "id": 6,
+      "abbr": "Dal"
+    },
+    "away": {
+      "id": 9,
+      "abbr": "GS"
+    }
+  },
+  "markets": {
+    "Moneyline": {
+      "type": {
+        "id": 150
+      },
+      "home": {
+        "marketOpen": {
+          "description": "Market Open",
+          "status": true,
+          "id": 1
+        },
+        "marketDuration": {
+          "id": 7,
+          "abbreviation": "Full Game",
+          "start": 1,
+          "end": 99
+        },
+        "resultingId": "1-6-2292111-150-50-7-01-99",
+        "projections": {
+          "mean": 0.6336,
+          "median": 0.6336
+        },
+        "lines": [
+          {
+            "id": "1-6-2292111-150-50-p005-7-01-99",
+            "optimal": 1,
+            "balanced": 1,
+            "type": "fraction",
+            "typeId": 1,
+            "line": 0.5,
+            "status": {
+              "marketSuspended": false,
+              "id": 1,
+              "description": "Market Not Suspended"
+            },
+            "probs": {
+              "standard": {
+                "over": 0.6332,
+                "under": 0.3668,
+                "push": 0
+              },
+              "normalized": {
+                "over": 0.6332,
+                "under": 0.3668
+              }
+            },
+            "modifiedAt": {
+              "seconds": "2021-02-04 14:25:57",
+              "micro": "2021-02-04 14:25:57.194661"
+            }
+          }
+        ]
+      },
+      "away": {
+        "marketOpen": {
+          "description": "Market Open",
+          "status": true,
+          "id": 1
+        },
+        "marketDuration": {
+          "id": 7,
+          "abbreviation": "Full Game",
+          "start": 1,
+          "end": 99
+        },
+        "resultingId": "1-9-2292111-150-50-7-01-99",
+        "projections": {
+          "mean": 0.3668,
+          "median": 0.3668
+        },
+        "lines": [
+          {
+            "id": "1-9-2292111-150-50-p005-7-01-99",
+            "optimal": 1,
+            "balanced": 1,
+            "type": "fraction",
+            "typeId": 1,
+            "line": 0.5,
+            "status": {
+              "marketSuspended": false,
+              "id": 1,
+              "description": "Market Not Suspended"
+            },
+            "probs": {
+              "standard": {
+                "over": 0.3668,
+                "under": 0.6332,
+                "push": 0
+              },
+              "normalized": {
+                "over": 0.3668,
+                "under": 0.6332
+              }
+            },
+            "modifiedAt": {
+              "seconds": "2021-02-04 14:25:57",
+              "micro": "2021-02-04 14:25:57.194661"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "awaySummaryId": "1-9-2292111-7-01-99"
+}
