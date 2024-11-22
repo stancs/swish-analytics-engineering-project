@@ -284,3 +284,32 @@ low-latency read/write operations. It's well-suited for caching purposes due to 
 Redis will cache frequently accessed data (e.g., match data, player props, team props), reducing the need to hit the
 database for every request. The cached data willhave an expiration time (TTL - Time to Live) to ensure freshness, and
 I'll implement cache invalidatino to handle updates or changes in data.
+
+### Caching Layer Design
+
+1. Cacheable Data:
+
+- Team Props Data: Team odds, match results, market types (e.g., Moneyline), and probabilities.
+- Player Props Data: Individual player projections, stats, and betting lines.
+- Match Data: Data related to a specific match (teams involed, match date)
+- queries: Frequently queried combinations like `matchId`, `teamId`, and `playerId` will be cached.
+
+2. Cache Keys: Cache keys should be unique, descriptive, and based on the parameters used to fetch the data.
+
+- Team Props
+
+```
+team:{teamId}:match:{matchId}:props
+```
+
+- Player Props:
+
+```
+player:{playerId}:match:{matchId}:props
+```
+
+- Example A cache key for the team props of the "Dallas Mavericks" in match `2292111` can be
+
+```
+team:6:match:2292111:props`
+```
