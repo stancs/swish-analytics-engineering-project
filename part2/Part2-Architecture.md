@@ -271,3 +271,16 @@ GET /matches/2292111/players/338365/props?propName=offense&statType=points&proje
 ```
 
 ## Caching Layer and Strategy
+
+A caching layer and the strategy to use it effectively and efficiently is crucial for improving performance, reducing
+database load, and ensuring faster responses in a system that handles real-time data such as Sports Betting System that
+we are designing.
+
+### Caching Strategy Overview
+
+I would like to use `Redis` as our caching layer. Redis is an in-memory data store that supports high-throughput and
+low-latency read/write operations. It's well-suited for caching purposes due to its speed and scalability.
+
+Redis will cache frequently accessed data (e.g., match data, player props, team props), reducing the need to hit the
+database for every request. The cached data willhave an expiration time (TTL - Time to Live) to ensure freshness, and
+I'll implement cache invalidatino to handle updates or changes in data.
