@@ -374,11 +374,15 @@ As demand increases, Redis might fill up with cached data. Redis supports evicti
 During periods of high traffic, cache warm-up techniques can be used. Pre-load frequently accessed data into the cache-
 before peak usage times, reducing cache misses and improving performance.
 
+### Cache Shard
+
+![Cache Shard](./cache-shard.jpg)
+
 ### Distributed Cache
 
 A **distributed cache** is a caching system where multiple cache servers coordinate to store frequently accessed data.
 Distributed caches are needed in environments where a single cache server isn't enough to store all the data. At the
-same time, IT provides **high availability**, **scalability**, and **fault tolerance**, making it ideal for systme
+same time, It provides **high availability**, **scalability**, and **fault tolerance**, making it ideal for systme
 requiring low-latency access to frequently used data.
 
 #### Why distributed cache?
@@ -386,6 +390,10 @@ requiring low-latency access to frequently used data.
 When the size of data required in the cache increases, storing the entire data in one system in impractical. And one
 cache system dies, then it can be a blocker to the entire system. Depending on one cache server can be potential single
 point of failure (SPOF).
+
+### System Architecture
+
+![System Architecture](./updated-system-architecture.jpg)
 
 #### Handling Cache Faiure in a Distributed Cache System
 
