@@ -10,7 +10,8 @@ There are two main functions that I needed to implement in this server-`search` 
 ### Search
 
 There are several ways to implement search functionality such as linear or binary search. If we are using in-memory
-database, I believe the best way to implement the search is hashtable.
+database, I believe the best way to implement searching capability is using hash table due to its quick search
+performance.
 
 A hash table is a data structure that stores key-value pairs, allowing for efficient data retrieval in constant time on
 average. It uses a hash function to compute an index (or hash code) for each key, mapping it to a specific "bucket"
@@ -40,13 +41,13 @@ The performance of a hash table depends on its operations and how well it handle
     hash function is inefficient.
 
 Since the requirement in this part of the project is to implement this search function in raw, I implemented this hash
-table without using JavaScript's `Map` object or JavaScript's `Object` data type. I put initial bucket size as `10` and
-put `0.75` as load factor. If the element count increases, it will resize the buckets and rehash all the old bucket
-items into the new buckets.
+table without using JavaScript's `Map` object or JavaScript's `Object` data type. I put the initial bucket size as `10`
+and put `0.75` as a load factor. If the element count increases, it will resize the buckets and rehash all the old
+bucket items into the new bucket.
 
 ### Sort
 
-There are several comparion-based sorting algorithms as you can see below:
+There are several comparison-based sorting algorithms as you can see below:
 
 - Bubble Sort: Compares adjacent elements and swaps them if out of order. Simple but inefficient (O(n<sup>2</sup>))
 
@@ -62,16 +63,16 @@ There are several comparion-based sorting algorithms as you can see below:
 - Quick Sort: Picks a pivot, partitions the array, and recursively sorts the partitions. Average-case O ( 𝑛 log 𝑛 ) but
   O(n<sup>2</sup>) in the worst case (unbalanced pivot selection).
 
-Merge sort and quick sort has similar average performance and both would be an excellent choice for implementing
-sorting.
+Merge sort and quick sort have similar average performance and either would be an excellent choice for implementing
+sorting capability.
 
-Merge sort shows more stable performance and it guarantees O ( 𝑛 log 𝑛 ) performance in the worst case. But it requires
-O(n) extran memory to hold temporary arrays during the merge process, making it less efficient for systems with limited
-memory.
+Merge sort shows more stable performance and it guarantees O ( 𝑛 log 𝑛 ) performance even in the worst case. But it
+requires O(n) extra memory to hold temporary arrays during the merge process, making it less efficient for systems with
+limited memory.
 
-Quick sort shows worst-case performance when the pivor is poorly chosen. However, this can be mitigated by using
+Quick sort might show worst-case performance when the pivor is poorly chosen. However, this can be mitigated by using
 randomized pivots. Quick sort is useful when memory is a concen or when average-case speed is crucial. And it's
-generally good for sorting arrays.
+generally good choice for sorting arrays.
 
 In the project, I implemented the most popular sorting method, quick sort.
 
@@ -84,7 +85,7 @@ part1> npm install
 
 ### Run the program
 
-[develop]
+[develop]: You can update the code in real time and it will be reflected to the server.
 
 ```
 part1> npm run dev
