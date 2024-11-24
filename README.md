@@ -2,7 +2,11 @@
 
 ## Part 1
 
+In the first part, I implemented a REST API to efficiently return a JSON object based on specific query parameters
+
 ## Part 2
+
+The second part focuses on the system implementation to support and power two core services-Team Props and Player Props.
 
 ### Overview
 
@@ -457,73 +461,71 @@ Cost is a function of efficiency. A microservice architecture could be blazing f
 hurting the overall efficiency grade. Provide your thoughts on the relative cost of your architecture. Consider the
 following:
 
-● What do you think are the most expensive areas of your architecture?
+- What do you think are the most expensive areas of your architecture?
 
-The most expensive areas in this microservice architecture likely include:
+  The most expensive areas in this microservice architecture likely include:
 
-1. Distributed Cache Layer: A high-frequency betting system heavily queries databases for team/player props and match
-   details. Usually, the number of matches that are happen concurrently are limited, and we can expect data queries will
-   concentrated before the match happens and when the match happens. The kind of data we will queries are not varied
-   much. They are limited to certain teams, the players belonging to those teams, and the match information. It would be
-   very imporatant to cache data before and during a certain match and service them for the clients with a satisfactory
-   response time and stable server performance against increasing concurrent service users. Redis cluster or similar
-   distributed caching solutions involve costs for setting up and scaling nodes, especially when using cloud services
-   like AWS ElastiCache.
+  1. **Distributed Cache Layer**: A high-frequency betting system heavily queries databases for team/player props and
+     match details. Usually, the number of matches that are happen concurrently are limited, and we can expect data
+     queries will concentrated before the match happens and when the match happens. The kind of data we will queries are
+     not varied much. They are limited to certain teams, the players belonging to those teams, and the match
+     information. It would be very imporatant to cache data before and during a certain match and service them for the
+     clients with a satisfactory response time and stable server performance against increasing concurrent service
+     users. Redis cluster or similar distributed caching solutions involve costs for setting up and scaling nodes,
+     especially when using cloud services like AWS ElastiCache.
 
-2. Horizontal Scaling of Microservices:
+  2. **Horizontal Scaling of Microservices**: Increased traffic requires deploying additional instances of microservices
+     (Player Props/Team Props) behind a load balancer. The cost of managing container services such as Kubernetes or AWS
+     ECS will drive the overall cost of the architecture.
 
-Increased traffic requires deploying additional instances of microservices (Player Props/Team Props) behind a load
-balancer. The cost of managing container services such as Kubernetes or AWS ECS will drive the overall cost of the
-architecture.
+- Where could money be saved in your architecture and how?
 
-● Where could money be saved in your architecture and how?
+  - **Optimize Caching Strategy**: Implement TTL (Time to Live) and eviction policies to ensure cache nodes store only
+    the most relevant data. Avoid over-replication by fine-tuning Redis replica settings. This will reduce memory and
+    compute costs in the distributed cache layer.
 
-- Optimize Caching Strategy: Implement TTL (Time to Live) and eviction policies to ensure cache nodes store only the
-  most relevant data. Avoid over-replication by fine-tuning Redis replica settings. This will reduce memory and compute
-  costs in the distributed cache layer.
+  - **Query Optimization**: Optimize database queries with proper indexing, query caching, and partitioning. Use read
+    replicas for read-heavy workloads to reduce pressure on the primary database. This will lower the need to scale the
+    primary database and associated IOPS costs.
 
-- Query Optimization: Optimize database queries with proper indexing, query caching, and partitioning. Use read replicas
-  for read-heavy workloads to reduce pressure on the primary database. This will lower the need to scale the primary
-  database and associated IOPS costs.
+  - **Right-Sizing Infrastructure**: Use auto-scaling for microservices and databases to scale resources dynamically
+    based on traffic patterns. Opt for reserved instances or savings plans in cloud environments for predictable
+    workloads. This will reduce idle resource costs during low traffic periods.
 
-- Right-Sizing Infrastructure: Use auto-scaling for microservices and databases to scale resources dynamically based on
-  traffic patterns. Opt for reserved instances or savings plans in cloud environments for predictable workloads. This
-  will reduce idle resource costs during low traffic periods.
+  - **Multi-Tier Caching**: Use an in-memory cache at the application layer (e.g., local memory or Memcached) for
+    extremely hot data, reducing dependency on distributed cache for repetitive queries. This will decrease the load on
+    the distributed cache.
 
-- Multi-Tier Caching: Use an in-memory cache at the application layer (e.g., local memory or Memcached) for extremely
-  hot data, reducing dependency on distributed cache for repetitive queries. This will decrease the load on the
-  distributed cache.
+- Where are the areas that might be costly, but are justified based on their importance?
 
-● Where are the areas that might be costly, but are justified based on their importance?
+  - **High Availability and Fault Tolerance**: Betting systems require constant uptime and accurate data delivery.
+    Investing in replication for databases and redundancy in cache layers ensures reliability during traffic surges or
+    node failures. For example, running additional Redis nodes or replicas adds cost but ensures critical data (e.g.,
+    odds, match details) is always available.
 
-- High Availability and Fault Tolerance: Betting systems require constant uptime and accurate data delivery. Investing
-  in replication for databases and redundancy in cache layers ensures reliability during traffic surges or node
-  failures. For example, running additional Redis nodes or replicas adds cost but ensures critical data (e.g., odds,
-  match details) is always available.
+  - **Scalable Database Architecture**: Investing in sharding, partitioning, and read replicas for databases ensures low
+    latency for queries. It’s costly but critical for seamless performance at scale.
 
-- Scalable Database Architecture: Investing in sharding, partitioning, and read replicas for databases ensures low
-  latency for queries. It’s costly but critical for seamless performance at scale.
+  - **Monitoring and Observability**: Using tools like Datadog, Prometheus, and Grafana for monitoring microservices,
+    databases, and caches ensures quick detection of bottlenecks and outages. Monitoring solutions incur subscription
+    and data storage costs, but they are essential for maintaining system health.
 
-- Monitoring and Observability: Using tools like Datadog, Prometheus, and Grafana for monitoring microservices,
-  databases, and caches ensures quick detection of bottlenecks and outages. Monitoring solutions incur subscription and
-  data storage costs, but they are essential for maintaining system health.
+- Assuming your architecture can service 100 requests per second before response times begin to slow, where would you
+  scale up first to support 200 requests per second? (Make whatever assumptions you like, but let us know what they are)
 
-● Assuming your architecture can service 100 requests per second before response times begin to slow, where would you
-scale up first to support 200 requests per second? (Make whatever assumptions you like, but let us know what they are)
+  - **Step 1**: Scale the Cache Layer First: The cache layer serves as the primary read source for high-traffic data
+    like player/team props. Adding more cache nodes increases throughput and reduces database dependency, minimizing the
+    need for database scaling.
 
-Step 1: Scale the Cache Layer First: The cache layer serves as the primary read source for high-traffic data like
-player/team props. Adding more cache nodes increases throughput and reduces database dependency, minimizing the need for
-database scaling.
+  - **Step 2**: Scale Microservices: With increased traffic, existing microservice instances might hit CPU or memory
+    limits. We need to use container orchestration (e.g., Kubernetes or AWS ECS) to add more instances of the Team Props
+    and Player Props services to enable auto-scaling based on CPU/memory thresholds or request counts.
 
-Step 2: Scale Microservices: With increased traffic, existing microservice instances might hit CPU or memory limits. We
-need to use container orchestration (e.g., Kubernetes or AWS ECS) to add more instances of the Team Props and Player
-Props services to enable auto-scaling based on CPU/memory thresholds or request counts.
+  - **Step 3**: Scale the Database: During cache misses, the database will see higher traffic. Without scaling, it could
+    become a bottleneck. In general, there are two ways to scale the database:
 
-Step 3: Scale the Database: During cache misses, the database will see higher traffic. Without scaling, it could become
-a bottleneck. In general, there are two ways to scale the database:
+    - Add read replicas for scaling read-heavy operations.
+    - Use database sharding if traffic increases disproportionately.
 
-- Add read replicas for scaling read-heavy operations.
-- Use database sharding if traffic increases disproportionately.
-
-With these scaling techniques, we can improves query performance and ensures the database can handle the load during
-cache misses.
+    With these scaling techniques, we can improves query performance and ensures the database can handle the load during
+    cache misses.
