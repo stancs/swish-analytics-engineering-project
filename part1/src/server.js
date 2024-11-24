@@ -58,9 +58,11 @@ server.use(restify.plugins.queryParser());
 // Endpoint
 server.get('/api/search', (req, res, next) => {
   const { playerId: playerIdStr, eventId: eventIdStr, sortBy } = req.query;
+  console.log('===== API REQUEST =====');
   console.log(`playerId: ${playerIdStr}`);
   console.log(`eventId: ${eventIdStr}`);
   console.log(`sorting: ${sortBy}`);
+  console.log('========================');
 
   // Search hash tables
   const filteredData = searchHashTables(playerIdStr, eventIdStr);
@@ -68,6 +70,7 @@ server.get('/api/search', (req, res, next) => {
 
   // Sort data if requested
   const sortedData = sortBy ? quickSort(filteredData, sortBy) : filteredData;
+  console.log('sortedData', sortedData);
 
   // Respond with data
   res.send(sortedData);

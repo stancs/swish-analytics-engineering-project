@@ -5,10 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server-map.js",
-    "dev-ht": "nodemon src/server-hashtable.js",
-    "start": "node src/server-map.js",
-    "start-ht": "node src/server-map.js"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
   },
   "author": "Stan Lee",
   "license": "ISC",

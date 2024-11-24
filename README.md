@@ -4,6 +4,27 @@
 
 In the first part, I implemented a REST API to efficiently return a JSON object based on specific query parameters
 
+### Installation
+
+```
+cd part 1
+part1> npm install
+```
+
+### Run the program
+
+[develop]
+
+```
+npm run dev
+```
+
+[production]
+
+```
+npm run start
+```
+
 ## Part 2
 
 The second part focuses on the system implementation to support and power two core services-Team Props and Player Props.
