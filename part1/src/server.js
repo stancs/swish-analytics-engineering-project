@@ -30,11 +30,17 @@ function searchHashTables(playerIdStr, eventIdStr) {
   let results = [];
 
   if (playerId && eventId) {
-    // Get results for playerId and eventId and find the intersection
+    // Get results for playerId first
     const playerResults = playerMap.get(playerId);
-    const eventResults = eventMap.get(eventId);
 
-    results = playerResults.filter(item => eventResults.includes(item));
+    let results = [];
+    // Filter by eventId
+    for (const item of playerResults) {
+      if (item.event_id === eventId) {
+        results.push(item);
+      }
+    }
+    return results;
   } else if (playerId) {
     // Get results for playerId
     results = playerMap.get(playerId);

@@ -2,7 +2,8 @@
 
 ## Part 1
 
-In the first part, I implemented a REST API to efficiently return a JSON object based on specific query parameters
+In the first part, a search API is implemented to query information based on either `playerId` or `eventId`, with
+results sorted in ascending or descending order.
 
 ### Installation
 
@@ -16,13 +17,29 @@ part1> npm install
 [develop]
 
 ```
-npm run dev
+part1> npm run dev
 ```
 
 [production]
 
 ```
-npm run start
+part1> npm run start
+```
+
+### Run Search
+
+```
+http://localhost:8080/api/search?playerId=338365
+
+http://localhost:8080/api/search?eventId=1947132
+
+http://localhost:8080/api/search?playerId=338365&eventId=1947132
+
+http://localhost:8080/api/search?playerId=338365&eventId=1947346
+
+http://localhost:8080/api/search?eventId=1947132&sortBy=desc
+
+http://localhost:8080/api/search?eventId=1947132&sortBy=asc
 ```
 
 ## Part 2
