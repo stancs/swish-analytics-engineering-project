@@ -5,6 +5,76 @@
 In the first part, a search API is implemented to query information based on either `playerId` or `eventId`, with
 results sorted in ascending or descending order.
 
+There are two main functions that I needed to implement in this server-`search` and `sort`.
+
+### Search
+
+There are several ways to implement search functionality such as linear or binary search. If we are using in-memory
+database, I believe the best way to implement the search is hashtable.
+
+A hash table is a data structure that stores key-value pairs, allowing for efficient data retrieval in constant time on
+average. It uses a hash function to compute an index (or hash code) for each key, mapping it to a specific "bucket"
+where the value is stored. If multiple keys hash to the same index, a collision resolution strategy (like chaining or
+open addressing) is used to manage them. Hash tables are widely used in scenarios requiring fast lookups, such as
+implementing dictionaries or caches.
+
+The performance of a hash table depends on its operations and how well it handles collisions.
+
+- Average-Case Performance
+
+  - Insert: O(1) – Adding an item involves computing the hash and placing it in a bucket.
+  - Search: O(1) – Retrieving an item by its key typically involves just one lookup.
+
+- Worst-Case Performance:
+
+  - Insert/Search/Delete: O(n) – In the worst case (e.g., if all elements hash to the same bucket), operations may
+    require traversing all items in a bucket.
+
+- Factors Affecting Performance:
+
+  - Load Factor: The ratio of the number of elements to the number of buckets. A higher load factor increases collisions
+    and slows down operations. Typically, hash tables are resized when the load factor exceeds a threshold (e.g., 0.75).
+
+  - Hash Function Quality: A good hash function evenly distributes keys across buckets to minimize collisions. Overall,
+    hash tables provide excellent performance for most practical scenarios but can degrade if poorly managed or if the
+    hash function is inefficient.
+
+Since the requirement in this part of the project is to implement this search function in raw, I implemented this hash
+table without using JavaScript's `Map` object or JavaScript's `Object` data type. I put initial bucket size as `10` and
+put `0.75` as load factor. If the element count increases, it will resize the buckets and rehash all the old bucket
+items into the new buckets.
+
+### Sort
+
+There are several comparion-based sorting algorithms as you can see below:
+
+- Bubble Sort: Compares adjacent elements and swaps them if out of order. Simple but inefficient (O(n<sup>2</sup>))
+
+- Selection Sort: Repeatedly selects the smallest (or largest) element and places it in the correct position. Also
+  (O(n<sup>2</sup>))
+
+- Insertion Sort: Builds a sorted list one element at a time by inserting each element in its proper position. Best-case
+  O(n) (nearly sorted lists); worst-case (O(n<sup>2</sup>)).
+
+- Merge Sort: A divide-and-conquer algorithm that splits the array into halves, sorts them, and merges them. Always O (
+  𝑛 log 𝑛 ).
+
+- Quick Sort: Picks a pivot, partitions the array, and recursively sorts the partitions. Average-case O ( 𝑛 log 𝑛 ) but
+  O(n<sup>2</sup>) in the worst case (unbalanced pivot selection).
+
+Merge sort and quick sort has similar average performance and both would be an excellent choice for implementing
+sorting.
+
+Merge sort shows more stable performance and it guarantees O ( 𝑛 log 𝑛 ) performance in the worst case. But it requires
+O(n) extran memory to hold temporary arrays during the merge process, making it less efficient for systems with limited
+memory.
+
+Quick sort shows worst-case performance when the pivor is poorly chosen. However, this can be mitigated by using
+randomized pivots. Quick sort is useful when memory is a concen or when average-case speed is crucial. And it's
+generally good for sorting arrays.
+
+In the project, I implemented the most popular sorting method, quick sort.
+
 ### Installation
 
 ```
@@ -26,20 +96,441 @@ part1> npm run dev
 part1> npm run start
 ```
 
+### Oper
+
 ### Run Search
+
+1. Query player info
 
 ```
 http://localhost:8080/api/search?playerId=338365
+```
 
+```
+[
+  {
+    "id": 4336379,
+    "season": 2017,
+    "date": "2017-10-17",
+    "event_id": 1947346,
+    "team_id": 9,
+    "team_abbr": "GS",
+    "opp_id": 10,
+    "opp_abbr": "Hou",
+    "player_id": 338365,
+    "name": "Stephen Curry",
+    "primary_pos_abbr": "PG",
+    "stat_type": "steals",
+    "projection": 2.18,
+    "line": 2
+  }
+]
+```
+
+2. Query Event
+
+```
 http://localhost:8080/api/search?eventId=1947132
+```
 
+```
+[
+  {
+    "id": 7021129,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 467468,
+    "name": "Greg Monroe",
+    "primary_pos_abbr": "C",
+    "stat_type": "assists",
+    "projection": 2.16,
+    "line": 2
+  },
+  {
+    "id": 7022547,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 512053,
+    "name": "Khris Middleton",
+    "primary_pos_abbr": "SG",
+    "stat_type": "three made",
+    "projection": 1.66,
+    "line": 1.5
+  },
+  {
+    "id": 7021138,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 531447,
+    "name": "Matthew Dellavedova",
+    "primary_pos_abbr": "PG",
+    "stat_type": "assists",
+    "projection": 2.94,
+    "line": 3
+  },
+  {
+    "id": 7022561,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 550991,
+    "name": "Tony Snell",
+    "primary_pos_abbr": "SG",
+    "stat_type": "three made",
+    "projection": 1.92,
+    "line": 1.5
+  },
+  {
+    "id": 7021338,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 601146,
+    "name": "Malcolm Brogdon",
+    "primary_pos_abbr": "PG",
+    "stat_type": "three made",
+    "projection": 1.29,
+    "line": 1
+  },
+  {
+    "id": 7021698,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 739957,
+    "name": "Giannis Antetokounmpo",
+    "primary_pos_abbr": "PF",
+    "stat_type": "blocks",
+    "projection": 1.8,
+    "line": 1.5
+  },
+  {
+    "id": 7022940,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 920067,
+    "name": "Thon Maker",
+    "primary_pos_abbr": "C",
+    "stat_type": "assists",
+    "projection": 1.25,
+    "line": 1
+  }
+]
+```
+
+3. Query the intersection of a specific player and an event
+
+```
 http://localhost:8080/api/search?playerId=338365&eventId=1947132
+```
 
+```
+[]
+```
+
+4. Query the intersection of a specific player and an event
+
+```
 http://localhost:8080/api/search?playerId=338365&eventId=1947346
+```
 
+```
+[
+  {
+    "id": 4336379,
+    "season": 2017,
+    "date": "2017-10-17",
+    "event_id": 1947346,
+    "team_id": 9,
+    "team_abbr": "GS",
+    "opp_id": 10,
+    "opp_abbr": "Hou",
+    "player_id": 338365,
+    "name": "Stephen Curry",
+    "primary_pos_abbr": "PG",
+    "stat_type": "steals",
+    "projection": 2.18,
+    "line": 2
+  }
+]
+```
+
+5. Query data with specific event ID, with results sorted in descending order
+
+```
 http://localhost:8080/api/search?eventId=1947132&sortBy=desc
+```
 
+```
+[
+  {
+    "id": 7022940,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 920067,
+    "name": "Thon Maker",
+    "primary_pos_abbr": "C",
+    "stat_type": "assists",
+    "projection": 1.25,
+    "line": 1
+  },
+  {
+    "id": 7021698,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 739957,
+    "name": "Giannis Antetokounmpo",
+    "primary_pos_abbr": "PF",
+    "stat_type": "blocks",
+    "projection": 1.8,
+    "line": 1.5
+  },
+  {
+    "id": 7021338,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 601146,
+    "name": "Malcolm Brogdon",
+    "primary_pos_abbr": "PG",
+    "stat_type": "three made",
+    "projection": 1.29,
+    "line": 1
+  },
+  {
+    "id": 7022561,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 550991,
+    "name": "Tony Snell",
+    "primary_pos_abbr": "SG",
+    "stat_type": "three made",
+    "projection": 1.92,
+    "line": 1.5
+  },
+  {
+    "id": 7021138,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 531447,
+    "name": "Matthew Dellavedova",
+    "primary_pos_abbr": "PG",
+    "stat_type": "assists",
+    "projection": 2.94,
+    "line": 3
+  },
+  {
+    "id": 7022547,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 512053,
+    "name": "Khris Middleton",
+    "primary_pos_abbr": "SG",
+    "stat_type": "three made",
+    "projection": 1.66,
+    "line": 1.5
+  },
+  {
+    "id": 7021129,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 467468,
+    "name": "Greg Monroe",
+    "primary_pos_abbr": "C",
+    "stat_type": "assists",
+    "projection": 2.16,
+    "line": 2
+  }
+]
+```
+
+6. Query data with specific event ID, with results sorted in ascending order
+
+```
 http://localhost:8080/api/search?eventId=1947132&sortBy=asc
+```
+
+```
+[
+  {
+    "id": 7021129,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 467468,
+    "name": "Greg Monroe",
+    "primary_pos_abbr": "C",
+    "stat_type": "assists",
+    "projection": 2.16,
+    "line": 2
+  },
+  {
+    "id": 7022547,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 512053,
+    "name": "Khris Middleton",
+    "primary_pos_abbr": "SG",
+    "stat_type": "three made",
+    "projection": 1.66,
+    "line": 1.5
+  },
+  {
+    "id": 7021138,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 531447,
+    "name": "Matthew Dellavedova",
+    "primary_pos_abbr": "PG",
+    "stat_type": "assists",
+    "projection": 2.94,
+    "line": 3
+  },
+  {
+    "id": 7022561,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 550991,
+    "name": "Tony Snell",
+    "primary_pos_abbr": "SG",
+    "stat_type": "three made",
+    "projection": 1.92,
+    "line": 1.5
+  },
+  {
+    "id": 7021338,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 601146,
+    "name": "Malcolm Brogdon",
+    "primary_pos_abbr": "PG",
+    "stat_type": "three made",
+    "projection": 1.29,
+    "line": 1
+  },
+  {
+    "id": 7021698,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 739957,
+    "name": "Giannis Antetokounmpo",
+    "primary_pos_abbr": "PF",
+    "stat_type": "blocks",
+    "projection": 1.8,
+    "line": 1.5
+  },
+  {
+    "id": 7022940,
+    "season": 2017,
+    "date": "2017-10-18",
+    "event_id": 1947132,
+    "team_id": 15,
+    "team_abbr": "Mil",
+    "opp_id": 2,
+    "opp_abbr": "Bos",
+    "player_id": 920067,
+    "name": "Thon Maker",
+    "primary_pos_abbr": "C",
+    "stat_type": "assists",
+    "projection": 1.25,
+    "line": 1
+  }
+]
 ```
 
 ## Part 2
@@ -94,35 +585,19 @@ API Endpoints:
 - Example Request:
 
 ```
+
 GET /teams/6/props?matchId=2292111&marketType=Moneyline&projectionType=mean&marketStatus=active&lineRange=0.5-1.5
+
 ```
 
 - Example Response:
 
 ```
-{
-  "team": {
-    "id": 6,
-    "abbr": "Dal"
-  },
-  "matchId": 2292111,
-  "marketType": "Moneyline",
-  "marketStatus": "active",
-  "projections": {
-    "mean": 0.6336,
-    "median": 0.6336
-  },
-  "lines": [
-    {
-      "line": 0.5,
-      "probs": {
-        "over": 0.6332,
-        "under": 0.3668
-      },
-      "status": "Market Not Suspended"
-    }
-  ]
-}
+
+{ "team": { "id": 6, "abbr": "Dal" }, "matchId": 2292111, "marketType": "Moneyline", "marketStatus": "active",
+"projections": { "mean": 0.6336, "median": 0.6336 }, "lines": [ { "line": 0.5, "probs": { "over": 0.6332, "under":
+0.3668 }, "status": "Market Not Suspended" } ] }
+
 ```
 
 2. Get Team Props for a Match
@@ -138,57 +613,21 @@ GET /teams/6/props?matchId=2292111&marketType=Moneyline&projectionType=mean&mark
 - Example Request:
 
 ```
+
 GET /matches/2292111/teams?marketType=Moneyline&projectionType=median&marketStatus=active&lineRange=0.5-1.0
+
 ```
 
 - Example Response
 
 ```
-{
-  "matchId": 2292111,
-  "teams": {
-    "home": {
-      "id": 6,
-      "abbr": "Dal",
-      "marketType": "Moneyline",
-      "marketStatus": "active",
-      "projections": {
-        "mean": 0.6336,
-        "median": 0.6336
-      },
-      "lines": [
-        {
-          "line": 0.5,
-          "probs": {
-            "over": 0.6332,
-            "under": 0.3668
-          },
-          "status": "Market Not Suspended"
-        }
-      ]
-    },
-    "away": {
-      "id": 9,
-      "abbr": "GS",
-      "marketType": "Moneyline",
-      "marketStatus": "active",
-      "projections": {
-        "mean": 0.3668,
-        "median": 0.3668
-      },
-      "lines": [
-        {
-          "line": 0.5,
-          "probs": {
-            "over": 0.3668,
-            "under": 0.6332
-          },
-          "status": "Market Not Suspended"
-        }
-      ]
-    }
-  }
-}
+
+{ "matchId": 2292111, "teams": { "home": { "id": 6, "abbr": "Dal", "marketType": "Moneyline", "marketStatus": "active",
+"projections": { "mean": 0.6336, "median": 0.6336 }, "lines": [ { "line": 0.5, "probs": { "over": 0.6332, "under":
+0.3668 }, "status": "Market Not Suspended" } ] }, "away": { "id": 9, "abbr": "GS", "marketType": "Moneyline",
+"marketStatus": "active", "projections": { "mean": 0.3668, "median": 0.3668 }, "lines": [ { "line": 0.5, "probs": {
+"over": 0.3668, "under": 0.6332 }, "status": "Market Not Suspended" } ] } } }
+
 ```
 
 ### Player Props Microservice
@@ -237,39 +676,20 @@ API Endpoints:
 - Example Request:
 
 ```
-GET /players/338365/props?matchId=2292111&propName=offense&statType=points&projectionType=mean&marketStatus=active&lineRange=29-30
+
+GET
+/players/338365/props?matchId=2292111&propName=offense&statType=points&projectionType=mean&marketStatus=active&lineRange=29-30
 
 ```
 
 - Example Response:
 
 ```
-{
-  "player": {
-    "id": 338365,
-    "name": "Stephen Curry"
-  },
-  "props": [
-    {
-      "name": "offense",
-      "type": "points",
-      "projection": {
-        "mean": 29.54,
-        "median": 29.5398
-      },
-      "lines": [
-        {
-          "line": 29.5,
-          "probs": {
-            "over": 0.5016,
-            "under": 0.4984
-          },
-          "status": "Market Not Suspended"
-        }
-      ]
-    }
-  ]
-}
+
+{ "player": { "id": 338365, "name": "Stephen Curry" }, "props": [ { "name": "offense", "type": "points", "projection": {
+"mean": 29.54, "median": 29.5398 }, "lines": [ { "line": 29.5, "probs": { "over": 0.5016, "under": 0.4984 }, "status":
+"Market Not Suspended" } ] } ] }
+
 ```
 
 1. Get Player Props for a Specific Match
@@ -287,39 +707,19 @@ GET /players/338365/props?matchId=2292111&propName=offense&statType=points&proje
 - Example Request:
 
 ```
+
 GET /matches/2292111/players/338365/props?propName=offense&statType=points&projectionType=median
+
 ```
 
 - Example Response:
 
 ```
-{
-  "matchId": 2292111,
-  "player": {
-    "id": 338365,
-    "name": "Stephen Curry"
-  },
-  "props": [
-    {
-      "name": "offense",
-      "type": "points",
-      "projection": {
-        "mean": 29.54,
-        "median": 29.5398
-      },
-      "lines": [
-        {
-          "line": 29.5,
-          "probs": {
-            "over": 0.5016,
-            "under": 0.4984
-          },
-          "status": "Market Not Suspended"
-        }
-      ]
-    }
-  ]
-}
+
+{ "matchId": 2292111, "player": { "id": 338365, "name": "Stephen Curry" }, "props": [ { "name": "offense", "type":
+"points", "projection": { "mean": 29.54, "median": 29.5398 }, "lines": [ { "line": 29.5, "probs": { "over": 0.5016,
+"under": 0.4984 }, "status": "Market Not Suspended" } ] } ] }
+
 ```
 
 ## Caching Layer and Strategy
@@ -351,19 +751,25 @@ I'll implement cache invalidatino to handle updates or changes in data.
 - Team Props
 
 ```
+
 team:{teamId}:match:{matchId}:props
+
 ```
 
 - Player Props:
 
 ```
+
 player:{playerId}:match:{matchId}:props
+
 ```
 
 - Example A cache key for the team props of the "Dallas Mavericks" in match `2292111` can be
 
 ```
+
 team:6:match:2292111:props`
+
 ```
 
 3. Expiration Time (TTL):
@@ -567,3 +973,7 @@ following:
 
     With these scaling techniques, we can improves query performance and ensures the database can handle the load during
     cache misses.
+
+```
+
+```
