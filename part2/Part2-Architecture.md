@@ -1,5 +1,9 @@
 ## Microservice
 
+I suggest to add a distributed cache layer to the system architecture as you can see below:
+
+![Update System Architecture](./updated-system-architecture.png)
+
 ### Team Props Microservice
 
 The `Team Props Microservice` manages and provides data related to team-specific gbetting propositions (props). This
@@ -393,7 +397,7 @@ point of failure (SPOF).
 
 ### System Architecture
 
-![System Architecture](./updated-system-architecture.jpg)
+![System Architecture](./updated-system-architecture.png)
 
 #### Handling Cache Faiure in a Distributed Cache System
 
