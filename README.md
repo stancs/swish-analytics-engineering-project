@@ -97,9 +97,7 @@ part1> npm run dev
 part1> npm run start
 ```
 
-### Oper
-
-### Run Search
+### Search Examples
 
 1. Query player info
 
@@ -536,20 +534,27 @@ http://localhost:8080/api/search?eventId=1947132&sortBy=asc
 
 ## Part 2
 
-The second part focuses on the system implementation to support and power two core services-Team Props and Player Props.
+The second part focuses on the system architecture design to support and power two core services-`Team Props` and
+`Player Props`.
 
 ### Overview
 
-I suggest to add a distributed cache layer to the system architecture as you can see below:
+As an updated version of the system architecture, I suggest to add a distributed cache layer after microservices to
+increase the system performance, and add load balancers before REST microservice layer to avoid single point of
+failure(SPOF):
 
 ![Update System Architecture](./part2/updated-system-architecture.png)
 
-### Team Props Microservice
+The details will be explained later.
 
-The `Team Props Microservice` manages and provides data related to team-specific gbetting propositions (props). This
+### Microservice
+
+#### Team Props Microservice
+
+The `Team Props Microservice` manages and provides data related to team-specific betting propositions (props). This
 includes team-level statistics, betting markers, probabilities, and outcomes for specific matches
 
-Request Parameters:
+**Request Parameters:**
 
 - Team Info
   - `teamId`: The unique identifier for a team
@@ -569,14 +574,13 @@ Request Parameters:
   - `lineRange`: Filters results for lines within a specific range
     - Example: `lineRange=0.5-1.5`
 
-API Endpoints:
+**API Endpoints:**
 
 1. Get Team Props by Team ID
 
 - Endpoint: GET /teams/{teamId}/props
 - Purpose: Retrieve props for a specific team based on various parameters.
-- Request
-- Parameters:
+- Request Parameters:
   - teamId (mandatory: query parameter): The unique identifier for a team.
   - matchId (optional): The unique identifier for the match.
   - marketType (optional): Specifies the type of betting market (e.g., Moneyline).
@@ -619,7 +623,7 @@ GET /teams/6/props?matchId=2292111&marketType=Moneyline&projectionType=mean&mark
 }
 ```
 
-2. Get Team Props for a Match
+1. Get Team Props for a Match
 
 - Endpoint: GET /matches/{matchId}/teams
 - Purpose: Retrieve props for both home and away teams in a specific match.
@@ -687,13 +691,13 @@ GET /matches/2292111/teams?marketType=Moneyline&projectionType=median&marketStat
 }
 ```
 
-### Player Props Microservice
+#### Player Props Microservice
 
 The Player Props Microservice handles player-specific betting data, such as individual player stats, performance
 projections, and betting props for specific matches. It allows users to query data for specific players, their
 performaces in matches, and related betting lines.
 
-Request Parameters
+**Request Parameters**
 
 - Player Info
   - playerId: The unique identifier for a player
@@ -716,7 +720,7 @@ Request Parameters
   - lineRange (optional): Filters by betting line values within a specific range
     - Example: `lineRange=29-30`
 
-API Endpoints:
+**API Endpoints:**
 
 1. Get Player Props by Player ID
 
@@ -822,13 +826,13 @@ GET /matches/2292111/players/338365/props?propName=offense&statType=points&proje
 }
 ```
 
-## Caching Layer and Strategy
+### Caching Layer and Strategy
 
 A caching layer and the strategy to use it effectively and efficiently is crucial for improving performance, reducing
 database load, and ensuring faster responses in a system that handles real-time data such as Sports Betting System that
 we are designing.
 
-### Caching Strategy Overview
+#### Caching Strategy Overview
 
 I would like to use `Redis` as our caching layer. Redis is an in-memory data store that supports high-throughput and
 low-latency read/write operations. It's well-suited for caching purposes due to its speed and scalability.
@@ -837,7 +841,7 @@ Redis will cache frequently accessed data (e.g., match data, player props, team 
 database for every request. The cached data willhave an expiration time (TTL - Time to Live) to ensure freshness, and
 I'll implement cache invalidatino to handle updates or changes in data.
 
-### Caching Layer Design
+#### Caching Layer Design
 
 1. Cacheable Data:
 
