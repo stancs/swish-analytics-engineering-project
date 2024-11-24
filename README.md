@@ -593,11 +593,29 @@ GET /teams/6/props?matchId=2292111&marketType=Moneyline&projectionType=mean&mark
 - Example Response:
 
 ```
-
-{ "team": { "id": 6, "abbr": "Dal" }, "matchId": 2292111, "marketType": "Moneyline", "marketStatus": "active",
-"projections": { "mean": 0.6336, "median": 0.6336 }, "lines": [ { "line": 0.5, "probs": { "over": 0.6332, "under":
-0.3668 }, "status": "Market Not Suspended" } ] }
-
+{
+  "team": {
+    "id": 6,
+    "abbr": "Dal"
+  },
+  "matchId": 2292111,
+  "marketType": "Moneyline",
+  "marketStatus": "active",
+  "projections": {
+    "mean": 0.6336,
+    "median": 0.6336
+  },
+  "lines": [
+    {
+      "line": 0.5,
+      "probs": {
+        "over": 0.6332,
+        "under": 0.3668
+      },
+      "status": "Market Not Suspended"
+    }
+  ]
+}
 ```
 
 2. Get Team Props for a Match
@@ -621,13 +639,51 @@ GET /matches/2292111/teams?marketType=Moneyline&projectionType=median&marketStat
 - Example Response
 
 ```
-
-{ "matchId": 2292111, "teams": { "home": { "id": 6, "abbr": "Dal", "marketType": "Moneyline", "marketStatus": "active",
-"projections": { "mean": 0.6336, "median": 0.6336 }, "lines": [ { "line": 0.5, "probs": { "over": 0.6332, "under":
-0.3668 }, "status": "Market Not Suspended" } ] }, "away": { "id": 9, "abbr": "GS", "marketType": "Moneyline",
-"marketStatus": "active", "projections": { "mean": 0.3668, "median": 0.3668 }, "lines": [ { "line": 0.5, "probs": {
-"over": 0.3668, "under": 0.6332 }, "status": "Market Not Suspended" } ] } } }
-
+{
+  "matchId": 2292111,
+  "teams": {
+    "home": {
+      "id": 6,
+      "abbr": "Dal",
+      "marketType": "Moneyline",
+      "marketStatus": "active",
+      "projections": {
+        "mean": 0.6336,
+        "median": 0.6336
+      },
+      "lines": [
+        {
+          "line": 0.5,
+          "probs": {
+            "over": 0.6332,
+            "under": 0.3668
+          },
+          "status": "Market Not Suspended"
+        }
+      ]
+    },
+    "away": {
+      "id": 9,
+      "abbr": "GS",
+      "marketType": "Moneyline",
+      "marketStatus": "active",
+      "projections": {
+        "mean": 0.3668,
+        "median": 0.3668
+      },
+      "lines": [
+        {
+          "line": 0.5,
+          "probs": {
+            "over": 0.3668,
+            "under": 0.6332
+          },
+          "status": "Market Not Suspended"
+        }
+      ]
+    }
+  }
+}
 ```
 
 ### Player Props Microservice
@@ -685,14 +741,35 @@ GET
 - Example Response:
 
 ```
-
-{ "player": { "id": 338365, "name": "Stephen Curry" }, "props": [ { "name": "offense", "type": "points", "projection": {
-"mean": 29.54, "median": 29.5398 }, "lines": [ { "line": 29.5, "probs": { "over": 0.5016, "under": 0.4984 }, "status":
-"Market Not Suspended" } ] } ] }
-
+{
+  "player": {
+    "id": 338365,
+    "name": "Stephen Curry"
+  },
+  "props": [
+    {
+      "name": "offense",
+      "type": "points",
+      "projection": {
+        "mean": 29.54,
+        "median": 29.5398
+      },
+      "lines": [
+        {
+          "line": 29.5,
+          "probs": {
+            "over": 0.5016,
+            "under": 0.4984
+          },
+          "status": "Market Not Suspended"
+        }
+      ]
+    }
+  ]
+}
 ```
 
-1. Get Player Props for a Specific Match
+2. Get Player Props for a Specific Match
 
 - Endpoint: GET /matches/{matchId}/players/{playerId}/props
 - Purpose: Retrieve props for a player in a specific match.
@@ -715,11 +792,33 @@ GET /matches/2292111/players/338365/props?propName=offense&statType=points&proje
 - Example Response:
 
 ```
-
-{ "matchId": 2292111, "player": { "id": 338365, "name": "Stephen Curry" }, "props": [ { "name": "offense", "type":
-"points", "projection": { "mean": 29.54, "median": 29.5398 }, "lines": [ { "line": 29.5, "probs": { "over": 0.5016,
-"under": 0.4984 }, "status": "Market Not Suspended" } ] } ] }
-
+{
+  "matchId": 2292111,
+  "player": {
+    "id": 338365,
+    "name": "Stephen Curry"
+  },
+  "props": [
+    {
+      "name": "offense",
+      "type": "points",
+      "projection": {
+        "mean": 29.54,
+        "median": 29.5398
+      },
+      "lines": [
+        {
+          "line": 29.5,
+          "probs": {
+            "over": 0.5016,
+            "under": 0.4984
+          },
+          "status": "Market Not Suspended"
+        }
+      ]
+    }
+  ]
+}
 ```
 
 ## Caching Layer and Strategy
