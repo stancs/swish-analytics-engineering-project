@@ -547,6 +547,11 @@ failure(SPOF):
 
 ### Microservice
 
+Requirements: **Create the necessary microservices that efficiently provide the required dependencies for each Core
+service. For each microservice document its purpose, request parameters, and response data. There’s no need to dive too
+deep into the data beyond getting the point across to us. You will not be assessed on your knowledge of the data outside
+of the examples provided.**
+
 #### Team Props Microservice
 
 The `Team Props Microservice` manages and provides data related to team-specific betting propositions (props). This
@@ -814,18 +819,24 @@ performaces in matches, and related betting lines.
 
 ### Caching Layer and Strategy
 
+#### Requirements
+
+**Develop a caching layer and strategy that each microservice will use. Document how it works. Questions to consider:
+Why did you choose this strategy & implementation? How is the data filled and managed? How might your strategy scale as
+demand increases and decreases?**
+
+#### Caching Strategy Overview
+
 A caching layer and the strategy to use it effectively and efficiently is crucial for improving performance, reducing
 database load, and ensuring faster responses in a system that handles real-time data such as Sports Betting System that
 we are designing.
-
-#### Caching Strategy Overview
 
 I would like to use `Redis` as our caching layer. Redis is an in-memory data store that supports high-throughput and
 low-latency read/write operations. It's well-suited for caching purposes due to its speed and scalability.
 
 Redis will cache frequently accessed data (e.g., match data, player props, team props), reducing the need to hit the
-database for every request. The cached data willhave an expiration time (TTL - Time to Live) to ensure freshness, and
-I'll implement cache invalidatino to handle updates or changes in data.
+database for every request. The cached data will have an expiration time (TTL - Time to Live) to ensure freshness, and
+I'll implement cache invalidation to handle updates or changes in data.
 
 #### Caching Layer Design
 
@@ -836,86 +847,141 @@ I'll implement cache invalidatino to handle updates or changes in data.
    - Match Data: Data related to a specific match (teams involed, match date)
    - queries: Frequently queried combinations like `matchId`, `teamId`, and `playerId` will be cached.
 
-2. Cache Keys: Cache keys should be unique, descriptive, and based on the parameters used to fetch the data.
+2. Cache Keys
 
-- Team Props
+   Cache keys should be unique, descriptive, and based on the parameters used to fetch the data.
 
-  ```
-  team:{teamId}:match:{matchId}:props
-  ```
+   - Team Props
+     ```
+     team:{teamId}:match:{matchId}:props
+     ```
+   - Player Props:
+     ```
+     player:{playerId}:match:{matchId}:props
+     ```
+   - Example: A cache key for the team props of the "Dallas Mavericks" in match `2292111` can be
+     ```
+     team:6:match:2292111:props`
+     ```
 
-- Player Props:
+3. Expiration Time (TTL)
 
-  ```
-  player:{playerId}:match:{matchId}:props
-  ```
-
-- Example A cache key for the team props of the "Dallas Mavericks" in match `2292111` can be
-  ```
-  team:6:match:2292111:props`
-  ```
-
-3. Expiration Time (TTL): Set a TTL(Time To Live) for cached data to ensure that data doesn't become stale. This is
-   important for time-sensitive data like betting odds.
+   Set a TTL(Time To Live) for cached data to ensure that data doesn't become stale. This is important for
+   time-sensitive data like betting odds.
 
    - Match Data: TTL of 1 hours (since odds may change frequently)
    - Player/Team Props Data: TTL of 30 minutes (because projections and odds can change more frequently during the game)
 
-If data is requested and it has expired, it will refreshed from the database.
+   If data is requested and it has expired, it will refreshed from the database.
 
-1. Cache Invalidation:
+4. Cache Invalidation:
 
-If the betting odds or props are updated, the cache should be invalidated and refreshed with the latest data.
+   If the betting odds or props are updated, the cache should be invalidated and refreshed with the latest data.
 
-- Manual Invalidation: The system can trigger cache invalidation via an internal process after betting data is updated
-  in the database.
-- Automated Invalidatino: Set TTL on the cache to expire after a specific period. Additionally, use Redis Pub/Sub to
-  notify all services when cache invlidation is needed.
+   - Manual Invalidation: The system can trigger cache invalidation via an internal process after betting data is
+     updated in the database.
+   - Automated Invalidatino: Set TTL on the cache to expire after a specific period. Additionally, use Redis Pub/Sub to
+     notify all services when cache invlidation is needed.
 
-2. Cache Population:
+5. Cache Population:
 
-When a client makes a request, the microserivce checks Redis for the data:
+   When a client makes a request, the microserivce checks Redis for the data:
 
-- If `cache hit`: Return the cached data
-- If `cache miss`: Query the database, return the data, and store it in Redis for future use.
+   - If `cache hit`: Return the cached data
+   - If `cache miss`: Query the database, return the data, and store it in Redis for future use.
 
-e.g., **The Player Props Microservice** will first check if the requested player props for a match exist in the Redis
-cache. If not, it will fetch the data from the database and store it in Redis.
+   e.g., **The Player Props Microservice** will first check if the requested player props for a match exist in the Redis
+   cache. If not, it will fetch the data from the database and store it in Redis.
 
 ### Scalability and Management as Demand Increases
 
 1. Horizontal Scaling
 
-Redis can be scaled horizontally by adding more Redis nodes and distributing the cache. Redis supports `sharding`,
-allowing data to be distributed across multiple Redis instances to improve performance under high load.
+   Redis can be scaled horizontally by adding more Redis nodes and distributing the cache. Redis supports `sharding`,
+   allowing data to be distributed across multiple Redis instances to improve performance under high load.
 
 2. Replication
 
-Redis supports replication where one Redis instance is the master, and other instances are replicas. This setup allows
-for high availability and read scalability. If one node fails, replicas can handle requests.
+   Redis supports replication where one Redis instance is the master, and other instances are replicas. This setup
+   allows for high availability and read scalability. If one node fails, replicas can handle requests.
 
 3. Auto-Scaling
 
-Use auto-scaling for the microservices that rely on caching. For instance, if the Player Props Microservice starts
-receiving a higher number of requests, additional instances of the service can be spawned to handle the increased load.
-Redis can scale along with the microservices, ensuring that as traffic increases, both data storage and compute
-resources are provisioned dynamically.
+   Use auto-scaling for the microservices that rely on caching. For instance, if the Player Props Microservice starts
+   receiving a higher number of requests, additional instances of the service can be spawned to handle the increased
+   load. Redis can scale along with the microservices, ensuring that as traffic increases, both data storage and compute
+   resources are provisioned dynamically.
 
 4. Eviction Policies
 
-As demand increases, Redis might fill up with cached data. Redis supports eviction policies to manage this:
+   As demand increases, Redis might fill up with cached data. Redis supports eviction policies to manage this:
 
-- LRU (Least Recently Used): Removes the least recently accessed data to make room for new data.
-- TTL Expiry: Automatically removes expired data after the TTL period, reducing the need for manual cache management.
+   - LRU (Least Recently Used): Removes the least recently accessed data to make room for new data.
+   - TTL Expiry: Automatically removes expired data after the TTL period, reducing the need for manual cache management.
 
 5. Cache Warm-up
 
-During periods of high traffic, cache warm-up techniques can be used. Pre-load frequently accessed data into the cache-
-before peak usage times, reducing cache misses and improving performance.
+   During periods of high traffic, cache warm-up techniques can be used. Pre-load frequently accessed data into the
+   cache- before peak usage times, reducing cache misses and improving performance.
 
-### Cache Shard
+### System Architecture
 
-![Cache Shard](./part2/cache-shard.jpg)
+#### Requirements
+
+Lastly, architect your diagram for a cache failure. Caches can fail physically or the data can become stale, both are
+considered as outages. Questions to consider: How are cache failures detected? Is the resolution manual or automatic?
+When this does happen how will your Core services remain operational providing the correct data?
+
+### Simple Cache Layer
+
+Based on the previous discussion, we can add a simple cache layer as you can see below:
+
+![Simple Cache Layer](./part2/simple-cache-layer.png)
+
+- Cache client: Team/Player Props REST Services works as cache clients, and they hold all the information regarding
+  cache servers. The cache client will choose one of the cache servers using a hash and search algorithm for each
+  incoming `insert` and `retrieve` request.
+- Cache servers: These servers maintain the cache of the data. Each cache server is accessible by all the cache client.
+  Each server is connected to the database to store or retrieve data. However, if any cache server is down, requests to
+  those servers are resolved as a missed cache by the cache clients.
+
+This simple design helps us to understand the cache layer, but it has several challenges we need to overcome:
+
+- Cache clients (REST services) have no way to realize the addition or failure of a cache server.
+- This simple design will suffer from the problem of single point of failure (SPOF) because we have a single cache
+  server for each set of cache data.
+- We don't know how the internals of cache servers manage existing data to maintain its data retrieval performance using
+  LRU strategy.
+
+### Updated Cache Layer and overall system architecture
+
+[Overall Architecture]
+
+![System Architecture](./part2/updated-system-architecture.png)
+
+[Cache Shard Details]
+
+![Cache Shard](./part2/cache-shard.png)
+
+Each cache client should use three mechanisms to store and eveit entries from the cache servers:
+
+- Hash map: The cache server uses a hash map to store or locate different entries inside the RAM of cache servers.
+- Doubly linked list: If we have to evict data from the cache, we require a linked list so that we can order entries
+  according to their frequency of access.
+- Eviction policy: Here we follow the least recently used (LRU) eviction policy
+
+Here is the summary of the changes:
+
+- The client's requests reach the microservices through the load balancers where cache clients reside.
+- Each cache client uses consistent hashing to indentify the cache server. Next, the cache client forwards the request
+  to the cache server maintaining a specific shard.
+- Each cache server has primary and replica servers. Internally, every server uses the same mechanisms to store and
+  evict cache entries.
+- Configuration service ensures that all the clients see an updated and consistent view of the cache servers, updating
+  consistent hashing configuration in the cache client side.
+- Monitoring services can be additionally used to log and report different metrics of the caching service.
+
+To sum up, we implement a distributed cache layer to maintain high availability, scalability, and fault tolerance.
 
 ### Distributed Cache
 
@@ -924,15 +990,9 @@ Distributed caches are needed in environments where a single cache server isn't 
 same time, It provides **high availability**, **scalability**, and **fault tolerance**, making it ideal for systme
 requiring low-latency access to frequently used data.
 
-#### Why distributed cache?
-
 When the size of data required in the cache increases, storing the entire data in one system in impractical. And one
 cache system dies, then it can be a blocker to the entire system. Depending on one cache server can be potential single
 point of failure (SPOF).
-
-### System Architecture
-
-![System Architecture](./part2/updated-system-architecture.png)
 
 #### Handling Cache Faiure in a Distributed Cache System
 
