@@ -846,7 +846,7 @@ I'll implement cache invalidation to handle updates or changes in data.
 
 1. Cacheable Data:
 
-   - Team Props Data: Team odds, match results, market types (e.g., Moneyline), and probabilities.
+   - Team Props Data: Team odds, match results, market types (e.g., `Moneyline`), and probabilities.
    - Player Props Data: Individual player projections, stats, and betting lines.
    - Match Data: Data related to a specific match (teams involed, match date)
    - queries: Frequently queried combinations like `matchId`, `teamId`, and `playerId` will be cached.
