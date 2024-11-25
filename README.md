@@ -545,8 +545,6 @@ failure(SPOF):
 
 ![Update System Architecture](./part2/updated-system-architecture.png)
 
-The details will be explained later.
-
 ### Microservice
 
 #### Team Props Microservice
@@ -578,52 +576,49 @@ includes team-level statistics, betting markers, probabilities, and outcomes for
 
 1. Get Team Props by Team ID
 
-- Endpoint: GET /teams/{teamId}/props
-- Purpose: Retrieve props for a specific team based on various parameters.
-- Request Parameters:
-  - teamId (mandatory: query parameter): The unique identifier for a team.
-  - matchId (optional): The unique identifier for the match.
-  - marketType (optional): Specifies the type of betting market (e.g., Moneyline).
-  - projectionType (optional): Specifies the projection type to retrieve (e.g., mean).
-  - marketStatus (optional): Filters by market status (e.g., active).
-  - lineRange (optional): Filters by line range(e.g., 0.5-1.5).
-- Example Request:
+   - Endpoint: GET /teams/{teamId}/props
+   - Purpose: Retrieve props for a specific team based on various parameters.
+   - Request Parameters:
+     - teamId (mandatory: query parameter): The unique identifier for a team.
+     - matchId (optional): The unique identifier for the match.
+     - marketType (optional): Specifies the type of betting market (e.g., Moneyline).
+     - projectionType (optional): Specifies the projection type to retrieve (e.g., mean).
+     - marketStatus (optional): Filters by market status (e.g., active).
+     - lineRange (optional): Filters by line range(e.g., 0.5-1.5).
+   - Example Request:
 
-```
+     ```
+     GET /teams/6/props?matchId=2292111&marketType=Moneyline&projectionType=mean&marketStatus=active&lineRange=0.5-1.5
+     ```
 
-GET /teams/6/props?matchId=2292111&marketType=Moneyline&projectionType=mean&marketStatus=active&lineRange=0.5-1.5
+   - Example Response:
+     ```
+     {
+       "team": {
+         "id": 6,
+         "abbr": "Dal"
+       },
+       "matchId": 2292111,
+       "marketType": "Moneyline",
+       "marketStatus": "active",
+       "projections": {
+         "mean": 0.6336,
+         "median": 0.6336
+       },
+       "lines": [
+         {
+           "line": 0.5,
+           "probs": {
+             "over": 0.6332,
+             "under": 0.3668
+           },
+           "status": "Market Not Suspended"
+         }
+       ]
+     }
+     ```
 
-```
-
-- Example Response:
-
-```
-{
-  "team": {
-    "id": 6,
-    "abbr": "Dal"
-  },
-  "matchId": 2292111,
-  "marketType": "Moneyline",
-  "marketStatus": "active",
-  "projections": {
-    "mean": 0.6336,
-    "median": 0.6336
-  },
-  "lines": [
-    {
-      "line": 0.5,
-      "probs": {
-        "over": 0.6332,
-        "under": 0.3668
-      },
-      "status": "Market Not Suspended"
-    }
-  ]
-}
-```
-
-1. Get Team Props for a Match
+2. Get Team Props for a Match
 
 - Endpoint: GET /matches/{matchId}/teams
 - Purpose: Retrieve props for both home and away teams in a specific match.
@@ -635,61 +630,58 @@ GET /teams/6/props?matchId=2292111&marketType=Moneyline&projectionType=mean&mark
   - lineRange (optional): Filters by line range (e.g., 0.5-1.5).
 - Example Request:
 
-```
-
-GET /matches/2292111/teams?marketType=Moneyline&projectionType=median&marketStatus=active&lineRange=0.5-1.0
-
-```
+  ```
+  GET /matches/2292111/teams?marketType=Moneyline&projectionType=median&marketStatus=active&lineRange=0.5-1.0
+  ```
 
 - Example Response
-
-```
-{
-  "matchId": 2292111,
-  "teams": {
-    "home": {
-      "id": 6,
-      "abbr": "Dal",
-      "marketType": "Moneyline",
-      "marketStatus": "active",
-      "projections": {
-        "mean": 0.6336,
-        "median": 0.6336
+  ```
+  {
+    "matchId": 2292111,
+    "teams": {
+      "home": {
+        "id": 6,
+        "abbr": "Dal",
+        "marketType": "Moneyline",
+        "marketStatus": "active",
+        "projections": {
+          "mean": 0.6336,
+          "median": 0.6336
+        },
+        "lines": [
+          {
+            "line": 0.5,
+            "probs": {
+              "over": 0.6332,
+              "under": 0.3668
+            },
+            "status": "Market Not Suspended"
+          }
+        ]
       },
-      "lines": [
-        {
-          "line": 0.5,
-          "probs": {
-            "over": 0.6332,
-            "under": 0.3668
-          },
-          "status": "Market Not Suspended"
-        }
-      ]
-    },
-    "away": {
-      "id": 9,
-      "abbr": "GS",
-      "marketType": "Moneyline",
-      "marketStatus": "active",
-      "projections": {
-        "mean": 0.3668,
-        "median": 0.3668
-      },
-      "lines": [
-        {
-          "line": 0.5,
-          "probs": {
-            "over": 0.3668,
-            "under": 0.6332
-          },
-          "status": "Market Not Suspended"
-        }
-      ]
+      "away": {
+        "id": 9,
+        "abbr": "GS",
+        "marketType": "Moneyline",
+        "marketStatus": "active",
+        "projections": {
+          "mean": 0.3668,
+          "median": 0.3668
+        },
+        "lines": [
+          {
+            "line": 0.5,
+            "probs": {
+              "over": 0.3668,
+              "under": 0.6332
+            },
+            "status": "Market Not Suspended"
+          }
+        ]
+      }
     }
   }
-}
-```
+  ```
 
 #### Player Props Microservice
 
@@ -736,43 +728,40 @@ performaces in matches, and related betting lines.
   - `lineRange` (optional): Filter props within a specific line range.
 - Example Request:
 
-```
-
-GET
-/players/338365/props?matchId=2292111&propName=offense&statType=points&projectionType=mean&marketStatus=active&lineRange=29-30
-
-```
+  ```
+  GET
+  /players/338365/props?matchId=2292111&propName=offense&statType=points&projectionType=mean&marketStatus=active&lineRange=29-30
+  ```
 
 - Example Response:
-
-```
-{
-  "player": {
-    "id": 338365,
-    "name": "Stephen Curry"
-  },
-  "props": [
-    {
-      "name": "offense",
-      "type": "points",
-      "projection": {
-        "mean": 29.54,
-        "median": 29.5398
-      },
-      "lines": [
-        {
-          "line": 29.5,
-          "probs": {
-            "over": 0.5016,
-            "under": 0.4984
-          },
-          "status": "Market Not Suspended"
-        }
-      ]
-    }
-  ]
-}
-```
+  ```
+  {
+    "player": {
+      "id": 338365,
+      "name": "Stephen Curry"
+    },
+    "props": [
+      {
+        "name": "offense",
+        "type": "points",
+        "projection": {
+          "mean": 29.54,
+          "median": 29.5398
+        },
+        "lines": [
+          {
+            "line": 29.5,
+            "probs": {
+              "over": 0.5016,
+              "under": 0.4984
+            },
+            "status": "Market Not Suspended"
+          }
+        ]
+      }
+    ]
+  }
+  ```
 
 2. Get Player Props for a Specific Match
 
@@ -788,43 +777,40 @@ GET
   - `lineRange` (optional): Filter props within a specific line range.
 - Example Request:
 
-```
-
-GET /matches/2292111/players/338365/props?propName=offense&statType=points&projectionType=median
-
-```
+  ```
+  GET /matches/2292111/players/338365/props?propName=offense&statType=points&projectionType=median
+  ```
 
 - Example Response:
-
-```
-{
-  "matchId": 2292111,
-  "player": {
-    "id": 338365,
-    "name": "Stephen Curry"
-  },
-  "props": [
-    {
-      "name": "offense",
-      "type": "points",
-      "projection": {
-        "mean": 29.54,
-        "median": 29.5398
-      },
-      "lines": [
-        {
-          "line": 29.5,
-          "probs": {
-            "over": 0.5016,
-            "under": 0.4984
-          },
-          "status": "Market Not Suspended"
-        }
-      ]
-    }
-  ]
-}
-```
+  ```
+  {
+    "matchId": 2292111,
+    "player": {
+      "id": 338365,
+      "name": "Stephen Curry"
+    },
+    "props": [
+      {
+        "name": "offense",
+        "type": "points",
+        "projection": {
+          "mean": 29.54,
+          "median": 29.5398
+        },
+        "lines": [
+          {
+            "line": 29.5,
+            "probs": {
+              "over": 0.5016,
+              "under": 0.4984
+            },
+            "status": "Market Not Suspended"
+          }
+        ]
+      }
+    ]
+  }
+  ```
 
 ### Caching Layer and Strategy
 
@@ -845,57 +831,48 @@ I'll implement cache invalidatino to handle updates or changes in data.
 
 1. Cacheable Data:
 
-- Team Props Data: Team odds, match results, market types (e.g., Moneyline), and probabilities.
-- Player Props Data: Individual player projections, stats, and betting lines.
-- Match Data: Data related to a specific match (teams involed, match date)
-- queries: Frequently queried combinations like `matchId`, `teamId`, and `playerId` will be cached.
+   - Team Props Data: Team odds, match results, market types (e.g., Moneyline), and probabilities.
+   - Player Props Data: Individual player projections, stats, and betting lines.
+   - Match Data: Data related to a specific match (teams involed, match date)
+   - queries: Frequently queried combinations like `matchId`, `teamId`, and `playerId` will be cached.
 
 2. Cache Keys: Cache keys should be unique, descriptive, and based on the parameters used to fetch the data.
 
 - Team Props
 
-```
-
-team:{teamId}:match:{matchId}:props
-
-```
+  ```
+  team:{teamId}:match:{matchId}:props
+  ```
 
 - Player Props:
 
-```
-
-player:{playerId}:match:{matchId}:props
-
-```
+  ```
+  player:{playerId}:match:{matchId}:props
+  ```
 
 - Example A cache key for the team props of the "Dallas Mavericks" in match `2292111` can be
+  ```
+  team:6:match:2292111:props`
+  ```
 
-```
+3. Expiration Time (TTL): Set a TTL(Time To Live) for cached data to ensure that data doesn't become stale. This is
+   important for time-sensitive data like betting odds.
 
-team:6:match:2292111:props`
-
-```
-
-3. Expiration Time (TTL):
-
-Set a TTL(Time To Live) for cached data to ensure that data doesn't become stale. This is important for time-sensitive
-data like betting odds.
-
-- Match Data: TTL of 1 hours (since odds may change frequently)
-- Player/Team Props Data: TTL of 30 minutes (because projections and odds can change more frequently during the game)
+   - Match Data: TTL of 1 hours (since odds may change frequently)
+   - Player/Team Props Data: TTL of 30 minutes (because projections and odds can change more frequently during the game)
 
 If data is requested and it has expired, it will refreshed from the database.
 
-4. Cache Invalidation:
+1. Cache Invalidation:
 
 If the betting odds or props are updated, the cache should be invalidated and refreshed with the latest data.
 
 - Manual Invalidation: The system can trigger cache invalidation via an internal process after betting data is updated
   in the database.
-- Automated Invalidatino: Set TTL on the cache to expire after a specific period. ADditionally, use Redis Pub/Sub to
+- Automated Invalidatino: Set TTL on the cache to expire after a specific period. Additionally, use Redis Pub/Sub to
   notify all services when cache invlidation is needed.
 
-5. Cache Population:
+2. Cache Population:
 
 When a client makes a request, the microserivce checks Redis for the data:
 
@@ -1077,7 +1054,3 @@ following:
 
     With these scaling techniques, we can improves query performance and ensures the database can handle the load during
     cache misses.
-
-```
-
-```

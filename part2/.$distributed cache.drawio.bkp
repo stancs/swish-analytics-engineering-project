@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram name="Page-1" id="utYsTXJ76eyPyCShVCwP">
-    <mxGraphModel dx="2583" dy="2212" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2206" dy="1968" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -24,6 +24,9 @@
         </mxCell>
         <mxCell id="gvF0CUg50vXPNr1gY694-2" value="Core Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="95" y="212.36" width="230" height="277.64" as="geometry" />
+        </mxCell>
+        <mxCell id="gvF0CUg50vXPNr1gY694-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;endArrow=none;endFill=0;dashed=1;dashPattern=1 4;" parent="1" source="gvF0CUg50vXPNr1gY694-5" target="gvF0CUg50vXPNr1gY694-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="gvF0CUg50vXPNr1gY694-5" value="&lt;h1 align=&quot;left&quot;&gt;Player Props REST Service Dependencies (See players.json for example object)&lt;br&gt;&lt;/h1&gt;&lt;div&gt;- Player Info&lt;/div&gt;&lt;div&gt;- Match Info&lt;/div&gt;&lt;div&gt;- Teams Info&lt;/div&gt;&lt;div&gt;- Market Info&lt;/div&gt;&lt;div&gt;- Projection Info&lt;/div&gt;&lt;div&gt;- Market Status Info&lt;/div&gt;&lt;div&gt;- Lines Info&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;align=left;" parent="1" vertex="1">
           <mxGeometry x="80" y="650" width="530" height="180" as="geometry" />
