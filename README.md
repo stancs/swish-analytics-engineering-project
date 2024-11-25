@@ -545,12 +545,16 @@ failure(SPOF):
 
 ![Update System Architecture](./part2/updated-system-architecture.png)
 
+The details of this architecture will be explained later.
+
 ### Microservice
 
-Requirements: **Create the necessary microservices that efficiently provide the required dependencies for each Core
-service. For each microservice document its purpose, request parameters, and response data. There’s no need to dive too
-deep into the data beyond getting the point across to us. You will not be assessed on your knowledge of the data outside
-of the examples provided.**
+#### Requirements
+
+Create the necessary microservices that efficiently provide the required dependencies for each Core service. For each
+microservice document its purpose, request parameters, and response data. There’s no need to dive too deep into the data
+beyond getting the point across to us. You will not be assessed on your knowledge of the data outside of the examples
+provided.
 
 #### Team Props Microservice
 
@@ -821,9 +825,9 @@ performaces in matches, and related betting lines.
 
 #### Requirements
 
-**Develop a caching layer and strategy that each microservice will use. Document how it works. Questions to consider:
-Why did you choose this strategy & implementation? How is the data filled and managed? How might your strategy scale as
-demand increases and decreases?**
+Develop a caching layer and strategy that each microservice will use. Document how it works. Questions to consider: Why
+did you choose this strategy & implementation? How is the data filled and managed? How might your strategy scale as
+demand increases and decreases?
 
 #### Caching Strategy Overview
 
